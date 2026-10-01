@@ -1,0 +1,251 @@
+/* =========================================
+   SMARTSTUDY AI - PREMIUM ANIMATIONS
+   ========================================= */
+
+/* Page entrance */
+.page-enter {
+    animation: pageEnter 0.6s ease-out both;
+}
+
+@keyframes pageEnter {
+    from {
+        opacity: 0;
+        transform: translateY(15px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+
+/* Fade animation */
+.fade-in {
+    animation: fadeIn 0.7s ease both;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+
+/* Slide up */
+.slide-up {
+    animation: slideUp 0.7s ease both;
+}
+
+@keyframes slideUp {
+    from {
+        opacity: 0;
+        transform: translateY(25px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+
+/* Slide from left */
+.slide-left {
+    animation: slideLeft 0.7s ease both;
+}
+
+@keyframes slideLeft {
+    from {
+        opacity: 0;
+        transform: translateX(-25px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+
+/* Slide from right */
+.slide-right {
+    animation: slideRight 0.7s ease both;
+}
+
+@keyframes slideRight {
+    from {
+        opacity: 0;
+        transform: translateX(25px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+
+/* Card hover */
+.premium-hover {
+    transition:
+        transform 0.3s ease,
+        box-shadow 0.3s ease;
+}
+
+.premium-hover:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.12);
+}
+
+
+/* Button animation */
+.premium-button {
+    transition:
+        transform 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+.premium-button:hover {
+    transform: translateY(-2px);
+}
+
+.premium-button:active {
+    transform: scale(0.97);
+}
+
+
+/* AI loading animation */
+.ai-loading {
+    position: relative;
+    pointer-events: none;
+    opacity: 0.8;
+}
+
+.ai-loading::after {
+    content: "";
+    display: inline-block;
+    width: 7px;
+    height: 7px;
+    margin-left: 6px;
+    border-radius: 50%;
+    background: currentColor;
+    animation: aiPulse 1s infinite;
+}
+
+@keyframes aiPulse {
+    0%, 100% {
+        opacity: 0.25;
+        transform: scale(0.8);
+    }
+
+    50% {
+        opacity: 1;
+        transform: scale(1.2);
+    }
+}
+
+
+/* AI typing cursor */
+.typing-cursor::after {
+    content: "|";
+    margin-left: 3px;
+    animation: cursorBlink 0.8s infinite;
+}
+
+@keyframes cursorBlink {
+    0%, 50% {
+        opacity: 1;
+    }
+
+    51%, 100% {
+        opacity: 0;
+    }
+}
+
+
+/* Staggered cards */
+.stagger > * {
+    opacity: 0;
+    animation: staggerIn 0.55s ease forwards;
+}
+
+.stagger > *:nth-child(1) {
+    animation-delay: 0.05s;
+}
+
+.stagger > *:nth-child(2) {
+    animation-delay: 0.12s;
+}
+
+.stagger > *:nth-child(3) {
+    animation-delay: 0.19s;
+}
+
+.stagger > *:nth-child(4) {
+    animation-delay: 0.26s;
+}
+
+.stagger > *:nth-child(5) {
+    animation-delay: 0.33s;
+}
+
+.stagger > *:nth-child(6) {
+    animation-delay: 0.40s;
+}
+
+@keyframes staggerIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+
+/* Progress animation */
+.animated-progress {
+    animation: progressGrow 1.2s ease-out;
+}
+
+@keyframes progressGrow {
+    from {
+        width: 0;
+    }
+}
+
+
+/* Soft glow */
+.ai-glow {
+    animation: aiGlow 2.5s ease-in-out infinite;
+}
+
+@keyframes aiGlow {
+    0%, 100% {
+        box-shadow: 0 0 0 rgba(99, 102, 241, 0);
+    }
+
+    50% {
+        box-shadow: 0 0 25px rgba(99, 102, 241, 0.25);
+    }
+}
+
+
+/* Accessibility */
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+}

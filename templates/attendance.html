@@ -1,0 +1,794 @@
+{% extends "base.html" %}
+
+{% block title %}
+Attendance Tracker - SmartStudy AI
+{% endblock %}
+
+
+{% block content %}
+
+<style>
+
+/* ================================================
+   ATTENDANCE PAGE
+================================================ */
+
+.attendance-page {
+    width: 100%;
+    max-width: 760px;
+    margin: 0 auto;
+    padding: 30px 16px 45px;
+    box-sizing: border-box;
+}
+
+
+/* ================================================
+   HEADER
+================================================ */
+
+.attendance-header {
+    text-align: center;
+    margin-bottom: 24px;
+}
+
+.attendance-icon {
+    width: 62px;
+    height: 62px;
+
+    margin: 0 auto 13px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 18px;
+
+    background: linear-gradient(
+        135deg,
+        #6366f1,
+        #06b6d4
+    );
+
+    font-size: 28px;
+
+    box-shadow:
+        0 12px 30px rgba(99, 102, 241, 0.25);
+}
+
+.attendance-header h1 {
+    margin: 0;
+
+    font-size: 29px;
+    font-weight: 800;
+
+    color: #f8fafc;
+}
+
+.attendance-header p {
+    max-width: 520px;
+
+    margin: 8px auto 0;
+
+    font-size: 13px;
+    line-height: 1.6;
+
+    color: #cbd5e1;
+}
+
+
+/* ================================================
+   FORM CARD
+================================================ */
+
+.attendance-card {
+    padding: 24px;
+
+    border: 1px solid rgba(255, 255, 255, 0.14);
+
+    border-radius: 20px;
+
+    background: rgba(15, 23, 42, 0.72);
+
+    box-shadow:
+        0 15px 40px rgba(0, 0, 0, 0.18);
+
+    backdrop-filter: blur(12px);
+}
+
+.attendance-form {
+    display: flex;
+    flex-direction: column;
+    gap: 19px;
+}
+
+
+/* ================================================
+   INPUTS
+================================================ */
+
+.attendance-field {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.attendance-field label {
+    display: block;
+
+    font-size: 14px;
+    font-weight: 700;
+
+    color: #f1f5f9;
+}
+
+.attendance-field small {
+    color: #94a3b8;
+
+    font-size: 11px;
+}
+
+.attendance-field input {
+    width: 100%;
+
+    padding: 13px 14px;
+
+    box-sizing: border-box;
+
+    border: 1px solid rgba(148, 163, 184, 0.35);
+
+    border-radius: 12px;
+
+    outline: none;
+
+    background: rgba(30, 41, 59, 0.80);
+
+    color: #ffffff;
+
+    font-size: 15px;
+
+    transition:
+        border-color 0.2s ease,
+        box-shadow 0.2s ease,
+        background 0.2s ease;
+}
+
+.attendance-field input::placeholder {
+    color: #64748b;
+}
+
+.attendance-field input:focus {
+    border-color: #38bdf8;
+
+    background: rgba(30, 41, 59, 1);
+
+    box-shadow:
+        0 0 0 3px rgba(56, 189, 248, 0.12);
+}
+
+
+/* ================================================
+   BUTTON
+================================================ */
+
+.attendance-button {
+    width: 100%;
+
+    margin-top: 3px;
+
+    padding: 13px 18px;
+
+    border: none;
+
+    border-radius: 12px;
+
+    background: linear-gradient(
+        135deg,
+        #6366f1,
+        #06b6d4
+    );
+
+    color: #ffffff;
+
+    font-size: 14px;
+    font-weight: 800;
+
+    cursor: pointer;
+
+    transition:
+        transform 0.2s ease,
+        box-shadow 0.2s ease,
+        opacity 0.2s ease;
+}
+
+.attendance-button:hover {
+    transform: translateY(-2px);
+
+    box-shadow:
+        0 10px 25px rgba(6, 182, 212, 0.20);
+}
+
+.attendance-button:disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
+    transform: none;
+}
+
+
+/* ================================================
+   ERROR
+================================================ */
+
+.attendance-error {
+    margin-top: 18px;
+
+    padding: 14px 16px;
+
+    border: 1px solid rgba(251, 146, 60, 0.35);
+
+    border-radius: 13px;
+
+    background: rgba(124, 45, 18, 0.35);
+
+    color: #fed7aa;
+
+    font-size: 13px;
+    font-weight: 700;
+
+    line-height: 1.5;
+}
+
+
+/* ================================================
+   RESULT CARD
+================================================ */
+
+.attendance-result {
+    margin-top: 20px;
+
+    padding: 25px;
+
+    border: 1px solid rgba(255, 255, 255, 0.14);
+
+    border-radius: 20px;
+
+    background: rgba(15, 23, 42, 0.78);
+
+    box-shadow:
+        0 15px 40px rgba(0, 0, 0, 0.18);
+
+    text-align: center;
+
+    backdrop-filter: blur(12px);
+}
+
+.attendance-result-title {
+    color: #cbd5e1;
+
+    font-size: 13px;
+    font-weight: 700;
+
+    text-transform: uppercase;
+
+    letter-spacing: 1px;
+}
+
+.attendance-percentage {
+    margin: 8px 0 17px;
+
+    font-size: 46px;
+    font-weight: 900;
+
+    background: linear-gradient(
+        135deg,
+        #818cf8,
+        #22d3ee
+    );
+
+    -webkit-background-clip: text;
+    background-clip: text;
+
+    color: transparent;
+}
+
+
+/* ================================================
+   PROGRESS BAR
+================================================ */
+
+.attendance-progress {
+    width: 100%;
+    height: 11px;
+
+    overflow: hidden;
+
+    border-radius: 20px;
+
+    background: rgba(148, 163, 184, 0.18);
+}
+
+.attendance-progress-bar {
+    width: 0;
+    height: 100%;
+
+    border-radius: inherit;
+
+    background: linear-gradient(
+        90deg,
+        #6366f1,
+        #22d3ee
+    );
+
+    transition: width 0.9s ease;
+}
+
+
+/* ================================================
+   DETAILS
+================================================ */
+
+.attendance-details {
+    display: grid;
+
+    grid-template-columns: 1fr 1fr;
+
+    gap: 12px;
+
+    margin-top: 20px;
+}
+
+.attendance-detail-box {
+    padding: 14px;
+
+    border: 1px solid rgba(148, 163, 184, 0.18);
+
+    border-radius: 12px;
+
+    background: rgba(30, 41, 59, 0.60);
+}
+
+.attendance-detail-number {
+    display: block;
+
+    color: #ffffff;
+
+    font-size: 20px;
+    font-weight: 800;
+}
+
+.attendance-detail-label {
+    display: block;
+
+    margin-top: 4px;
+
+    color: #94a3b8;
+
+    font-size: 11px;
+}
+
+
+/* ================================================
+   STATUS
+================================================ */
+
+.attendance-status {
+    margin-top: 17px;
+
+    padding: 12px 14px;
+
+    border-radius: 11px;
+
+    font-size: 13px;
+    font-weight: 700;
+
+    line-height: 1.5;
+}
+
+.attendance-good {
+    border: 1px solid rgba(52, 211, 153, 0.30);
+
+    background: rgba(6, 78, 59, 0.35);
+
+    color: #a7f3d0;
+}
+
+.attendance-warning {
+    border: 1px solid rgba(251, 146, 60, 0.30);
+
+    background: rgba(124, 45, 18, 0.35);
+
+    color: #fed7aa;
+}
+
+
+/* ================================================
+   EXAMPLE
+================================================ */
+
+.attendance-example {
+    margin-top: 14px;
+
+    text-align: center;
+
+    color: #94a3b8;
+
+    font-size: 11px;
+}
+
+
+/* ================================================
+   MOBILE
+================================================ */
+
+@media (max-width: 600px) {
+
+    .attendance-page {
+        padding: 20px 12px 35px;
+    }
+
+    .attendance-header h1 {
+        font-size: 25px;
+    }
+
+    .attendance-card,
+    .attendance-result {
+        padding: 18px;
+    }
+
+    .attendance-percentage {
+        font-size: 39px;
+    }
+
+    .attendance-details {
+        gap: 9px;
+    }
+
+}
+
+</style>
+
+
+<div class="attendance-page">
+
+
+    <!-- HEADER -->
+
+    <div class="attendance-header">
+
+        <div class="attendance-icon">
+            📊
+        </div>
+
+        <h1>
+            Attendance Tracker
+        </h1>
+
+        <p>
+            Enter the total number of classes conducted
+            and the number of classes you attended.
+        </p>
+
+    </div>
+
+
+    <!-- FORM -->
+
+    <div class="attendance-card">
+
+        <form
+            method="POST"
+            id="attendanceForm"
+            class="attendance-form"
+        >
+
+
+            <!-- TOTAL CLASSES -->
+
+            <div class="attendance-field">
+
+                <label for="total">
+                    📚 Total Classes Conducted
+                </label>
+
+                <small>
+                    Enter the total number of classes held.
+                </small>
+
+                <input
+                    type="number"
+                    id="total"
+                    name="total"
+                    min="1"
+                    step="1"
+                    value="{{ total }}"
+                    placeholder="Example: 100"
+                    required
+                >
+
+            </div>
+
+
+            <!-- ATTENDED CLASSES -->
+
+            <div class="attendance-field">
+
+                <label for="attended">
+                    ✅ Classes You Attended
+                </label>
+
+                <small>
+                    This number cannot be greater than
+                    total classes.
+                </small>
+
+                <input
+                    type="number"
+                    id="attended"
+                    name="attended"
+                    min="0"
+                    step="1"
+                    value="{{ attended }}"
+                    placeholder="Example: 50"
+                    required
+                >
+
+            </div>
+
+
+            <button
+                type="submit"
+                id="attendanceButton"
+                class="attendance-button"
+            >
+                📊 Calculate Attendance
+            </button>
+
+
+        </form>
+
+
+        <div class="attendance-example">
+            Example: Total Classes = 100,
+            Classes Attended = 50 → Attendance = 50%
+        </div>
+
+    </div>
+
+
+    <!-- ERROR -->
+
+    {% if error %}
+
+    <div class="attendance-error">
+
+        ⚠️ {{ error }}
+
+    </div>
+
+    {% endif %}
+
+
+    <!-- RESULT -->
+
+    {% if percentage is not none %}
+
+    <div class="attendance-result">
+
+        <div class="attendance-result-title">
+            Your Attendance
+        </div>
+
+
+        <div class="attendance-percentage">
+            {{ percentage }}%
+        </div>
+
+
+        <!-- PROGRESS -->
+
+        <div class="attendance-progress">
+
+            <div
+                id="attendanceProgress"
+                class="attendance-progress-bar"
+                data-percentage="{{ percentage }}"
+            ></div>
+
+        </div>
+
+
+        <!-- DETAILS -->
+
+        <div class="attendance-details">
+
+
+            <div class="attendance-detail-box">
+
+                <span class="attendance-detail-number">
+                    {{ attended }}
+                </span>
+
+                <span class="attendance-detail-label">
+                    Classes Attended
+                </span>
+
+            </div>
+
+
+            <div class="attendance-detail-box">
+
+                <span class="attendance-detail-number">
+                    {{ total }}
+                </span>
+
+                <span class="attendance-detail-label">
+                    Total Classes
+                </span>
+
+            </div>
+
+
+        </div>
+
+
+        <!-- STATUS -->
+
+        {% if percentage >= 75 %}
+
+        <div class="
+            attendance-status
+            attendance-good
+        ">
+            ✅ Good! Your attendance is 75% or above.
+        </div>
+
+        {% else %}
+
+        <div class="
+            attendance-status
+            attendance-warning
+        ">
+            ⚠️ Your attendance is below 75%.
+        </div>
+
+        {% endif %}
+
+
+    </div>
+
+    {% endif %}
+
+
+</div>
+
+
+<script>
+
+document.addEventListener(
+    "DOMContentLoaded",
+    function () {
+
+
+        /* ==========================================
+           PROGRESS BAR
+        ========================================== */
+
+        const progress =
+            document.getElementById(
+                "attendanceProgress"
+            );
+
+        if (progress) {
+
+            let percentage =
+                Number(
+                    progress.dataset.percentage
+                );
+
+            if (isNaN(percentage)) {
+                percentage = 0;
+            }
+
+            percentage =
+                Math.max(
+                    0,
+                    Math.min(
+                        100,
+                        percentage
+                    )
+                );
+
+            setTimeout(
+                function () {
+
+                    progress.style.width =
+                        percentage + "%";
+
+                },
+                150
+            );
+
+        }
+
+
+        /* ==========================================
+           FORM VALIDATION
+        ========================================== */
+
+        const form =
+            document.getElementById(
+                "attendanceForm"
+            );
+
+        const totalInput =
+            document.getElementById(
+                "total"
+            );
+
+        const attendedInput =
+            document.getElementById(
+                "attended"
+            );
+
+        const button =
+            document.getElementById(
+                "attendanceButton"
+            );
+
+
+        if (
+            form &&
+            totalInput &&
+            attendedInput
+        ) {
+
+            form.addEventListener(
+                "submit",
+                function (event) {
+
+                    const total =
+                        Number(
+                            totalInput.value
+                        );
+
+                    const attended =
+                        Number(
+                            attendedInput.value
+                        );
+
+
+                    if (
+                        attended > total
+                    ) {
+
+                        event.preventDefault();
+
+                        alert(
+                            "Attended classes cannot be greater than total classes."
+                        );
+
+                        return;
+
+                    }
+
+
+                    if (button) {
+
+                        button.disabled = true;
+
+                        button.innerHTML =
+                            "⏳ Calculating...";
+
+                    }
+
+                }
+            );
+
+        }
+
+    }
+);
+
+</script>
+
+
+{% endblock %}

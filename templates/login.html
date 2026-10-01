@@ -1,0 +1,90 @@
+{% extends "base.html" %}
+
+{% block title %}Login{% endblock %}
+
+{% block content %}
+
+<section class="login-container">
+
+    <div class="login-left">
+
+        <h1>Welcome Back 👋</h1>
+
+        <p>
+            Login to continue using SmartStudy AI and access your
+            notes, quizzes, AI chatbot, PDF summarizer and more.
+        </p>
+
+        <img src="{{ url_for('static', filename='images/ai-robot.png') }}" alt="AI">
+
+    </div>
+
+    <div class="login-right card">
+
+        <h2>Login</h2>
+
+        <form method="POST">
+
+            <input
+                type="text"
+                name="username"
+                placeholder="Username"
+                required>
+
+            <input
+                type="password"
+                id="password"
+                name="password"
+                placeholder="Password"
+                required>
+
+            <button type="button" class="show-btn" onclick="togglePassword()">
+                👁 Show Password
+            </button>
+
+            <br><br>
+
+            <button type="submit">
+                Login
+            </button>
+
+        </form>
+
+        <br>
+
+        <p>
+            Don't have an account?
+
+            <a href="/register">
+                Register
+            </a>
+
+        </p>
+
+    </div>
+
+</section>
+
+<script>
+
+function togglePassword(){
+
+    const pass=document.getElementById("password");
+
+    if(pass.type==="password"){
+
+        pass.type="text";
+
+    }
+
+    else{
+
+        pass.type="password";
+
+    }
+
+}
+
+</script>
+
+{% endblock %}

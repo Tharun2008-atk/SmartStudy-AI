@@ -1,0 +1,715 @@
+{% extends "base.html" %}
+
+{% block title %}
+PDF Summarizer
+{% endblock %}
+
+{% block content %}
+
+<style>
+
+/* =========================================
+   PREMIUM PDF SUMMARIZER
+   ========================================= */
+
+.pdf-page {
+    max-width: 950px;
+    margin: 0 auto;
+    padding: 20px 15px 40px;
+}
+
+/* HEADER */
+
+.pdf-header {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.pdf-icon {
+    width: 58px;
+    height: 58px;
+
+    margin: 0 auto 9px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 17px;
+
+    background: linear-gradient(
+        135deg,
+        #6366f1,
+        #8b5cf6
+    );
+
+    font-size: 30px;
+
+    box-shadow:
+        0 10px 25px rgba(99,102,241,.28);
+}
+
+.pdf-header h1 {
+    margin: 0 0 6px;
+
+    color: #ffffff;
+
+    font-size: 28px;
+    font-weight: 800;
+}
+
+.pdf-header p {
+    max-width: 650px;
+
+    margin: 0 auto;
+
+    color: rgba(255,255,255,.72);
+
+    font-size: 13px;
+    line-height: 1.5;
+}
+
+
+/* UPLOAD CARD */
+
+.pdf-card {
+    padding: 20px;
+
+    background: #ffffff;
+
+    border-radius: 17px;
+
+    box-shadow:
+        0 10px 30px rgba(0,0,0,.16);
+}
+
+.pdf-label {
+    display: block;
+
+    margin-bottom: 9px;
+
+    color: #111827;
+
+    font-size: 14px;
+    font-weight: 700;
+}
+
+
+/* DROP AREA */
+
+.pdf-drop-area {
+    position: relative;
+
+    min-height: 145px;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    border: 2px dashed #c7d2fe;
+
+    border-radius: 14px;
+
+    background: #f8faff;
+
+    cursor: pointer;
+
+    transition: .25s ease;
+}
+
+.pdf-drop-area:hover {
+    border-color: #6366f1;
+
+    background: #eef2ff;
+}
+
+.pdf-drop-area.dragging {
+    border-color: #6366f1;
+
+    background: #e0e7ff;
+
+    transform: scale(1.01);
+}
+
+.pdf-file-input {
+    position: absolute;
+
+    inset: 0;
+
+    width: 100%;
+    height: 100%;
+
+    opacity: 0;
+
+    cursor: pointer;
+}
+
+.pdf-upload-content {
+    text-align: center;
+
+    pointer-events: none;
+}
+
+.pdf-upload-icon {
+    font-size: 35px;
+
+    margin-bottom: 5px;
+}
+
+.pdf-upload-title {
+    color: #1f2937;
+
+    font-size: 15px;
+    font-weight: 700;
+}
+
+.pdf-upload-subtitle {
+    margin-top: 4px;
+
+    color: #6b7280;
+
+    font-size: 12px;
+}
+
+
+/* FILE NAME */
+
+.pdf-file-name {
+    display: none;
+
+    margin-top: 10px;
+
+    padding: 9px 12px;
+
+    border-radius: 9px;
+
+    background: #eef2ff;
+
+    color: #4338ca;
+
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.pdf-file-name.show {
+    display: block;
+}
+
+
+/* BUTTON */
+
+.pdf-button {
+    width: 100%;
+
+    margin-top: 13px;
+
+    padding: 12px;
+
+    border: none;
+
+    border-radius: 11px;
+
+    background: linear-gradient(
+        135deg,
+        #6366f1,
+        #7c3aed
+    );
+
+    color: #ffffff;
+
+    font-family: inherit;
+
+    font-size: 14px;
+    font-weight: 700;
+
+    cursor: pointer;
+
+    box-shadow:
+        0 7px 18px rgba(99,102,241,.25);
+
+    transition: .25s ease;
+}
+
+.pdf-button:hover {
+    transform: translateY(-2px);
+
+    box-shadow:
+        0 10px 25px rgba(99,102,241,.35);
+}
+
+.pdf-button:disabled {
+    opacity: .7;
+
+    cursor: wait;
+
+    transform: none;
+}
+
+
+/* SUMMARY */
+
+.pdf-result {
+    margin-top: 18px;
+
+    padding: 18px;
+
+    background: #ffffff;
+
+    border-radius: 17px;
+
+    box-shadow:
+        0 10px 30px rgba(0,0,0,.16);
+}
+
+.pdf-result-header {
+    display: flex;
+
+    align-items: center;
+
+    gap: 10px;
+
+    padding-bottom: 12px;
+
+    border-bottom: 1px solid #e5e7eb;
+}
+
+.summary-avatar {
+    width: 40px;
+    height: 40px;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 11px;
+
+    background: linear-gradient(
+        135deg,
+        #6366f1,
+        #8b5cf6
+    );
+
+    font-size: 21px;
+}
+
+.summary-header-text small {
+    display: block;
+
+    color: #6366f1;
+
+    font-size: 9px;
+
+    font-weight: 800;
+
+    letter-spacing: 1px;
+}
+
+.summary-header-text h2 {
+    margin: 2px 0 0;
+
+    color: #111827;
+
+    font-size: 18px;
+}
+
+
+/* SUMMARY CONTENT */
+
+.pdf-summary {
+    margin-top: 14px;
+
+    padding: 16px;
+
+    background: #f8fafc;
+
+    border: 1px solid #e5e7eb;
+
+    border-radius: 12px;
+
+    color: #374151;
+
+    font-size: 14px;
+
+    line-height: 1.6;
+
+    overflow-wrap: anywhere;
+}
+
+.pdf-summary p {
+    margin: 4px 0;
+}
+
+.pdf-summary h2,
+.pdf-summary h3 {
+    margin: 13px 0 5px;
+
+    color: #312e81;
+}
+
+.pdf-summary h2 {
+    font-size: 18px;
+}
+
+.pdf-summary h3 {
+    font-size: 15px;
+}
+
+
+/* BULLETS */
+
+.pdf-point {
+    display: flex;
+
+    gap: 7px;
+
+    margin: 3px 0;
+}
+
+.pdf-point span {
+    color: #6366f1;
+
+    font-weight: bold;
+}
+
+.pdf-point p {
+    margin: 0;
+}
+
+
+/* MOBILE */
+
+@media(max-width:600px) {
+
+    .pdf-page {
+        padding: 15px 10px 30px;
+    }
+
+    .pdf-header h1 {
+        font-size: 24px;
+    }
+
+    .pdf-card,
+    .pdf-result {
+        padding: 14px;
+    }
+
+    .pdf-drop-area {
+        min-height: 125px;
+    }
+
+    .pdf-summary {
+        padding: 12px;
+
+        font-size: 13px;
+    }
+
+}
+
+</style>
+
+
+<div class="pdf-page">
+
+    <!-- HEADER -->
+
+    <div class="pdf-header">
+
+        <div class="pdf-icon">
+            📄
+        </div>
+
+        <h1>
+            AI PDF Summarizer
+        </h1>
+
+        <p>
+            Upload your study PDF and let SmartStudy AI
+            create simple, exam-friendly notes.
+        </p>
+
+    </div>
+
+
+    <!-- UPLOAD -->
+
+    <div class="pdf-card">
+
+        <form
+            method="POST"
+            enctype="multipart/form-data"
+            id="pdfForm"
+        >
+
+            <label class="pdf-label">
+                📄 Select Study PDF
+            </label>
+
+
+            <div
+                class="pdf-drop-area"
+                id="dropArea"
+            >
+
+                <input
+                    type="file"
+                    id="pdf"
+                    name="pdf"
+                    class="pdf-file-input"
+                    accept=".pdf,application/pdf"
+                    required
+                >
+
+                <div class="pdf-upload-content">
+
+                    <div class="pdf-upload-icon">
+                        📄
+                    </div>
+
+                    <div class="pdf-upload-title">
+                        Click to select your PDF
+                    </div>
+
+                    <div class="pdf-upload-subtitle">
+                        PDF files only
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <div
+                class="pdf-file-name"
+                id="fileName"
+            ></div>
+
+
+            <button
+                type="submit"
+                class="pdf-button"
+                id="uploadButton"
+            >
+                🚀 Upload & Summarize
+            </button>
+
+        </form>
+
+    </div>
+
+
+    <!-- SUMMARY -->
+
+    {% if summary %}
+
+    <div class="pdf-result">
+
+        <div class="pdf-result-header">
+
+            <div class="summary-avatar">
+                🤖
+            </div>
+
+            <div class="summary-header-text">
+
+                <small>SMARTSTUDY AI</small>
+
+                <h2>
+                    AI Summary
+                </h2>
+
+            </div>
+
+        </div>
+
+
+        <div class="pdf-summary" id="summaryBox">
+
+            {% for line in summary.split('\n') %}
+
+                {% if line.strip() == "" %}
+
+                    <div style="height:4px;"></div>
+
+                {% elif line.startswith("###") %}
+
+                    <h3>
+                        {{ line.replace("###","").strip() }}
+                    </h3>
+
+                {% elif line.startswith("##") %}
+
+                    <h2>
+                        {{ line.replace("##","").strip() }}
+                    </h2>
+
+                {% elif line.startswith("#") %}
+
+                    <h2>
+                        {{ line.replace("#","").strip() }}
+                    </h2>
+
+                {% elif line.startswith("- ") or line.startswith("* ") %}
+
+                    <div class="pdf-point">
+
+                        <span>•</span>
+
+                        <p>
+                            {{ line[2:].strip() }}
+                        </p>
+
+                    </div>
+
+                {% else %}
+
+                    <p>
+                        {{ line }}
+                    </p>
+
+                {% endif %}
+
+            {% endfor %}
+
+        </div>
+
+    </div>
+
+    {% endif %}
+
+</div>
+
+
+<script>
+
+document.addEventListener("DOMContentLoaded", function () {
+
+    const form =
+        document.getElementById("pdfForm");
+
+    const input =
+        document.getElementById("pdf");
+
+    const dropArea =
+        document.getElementById("dropArea");
+
+    const fileName =
+        document.getElementById("fileName");
+
+    const button =
+        document.getElementById("uploadButton");
+
+
+    /* FILE SELECT */
+
+    input.addEventListener("change", function () {
+
+        showFile(input.files[0]);
+
+    });
+
+
+    function showFile(file) {
+
+        if (!file) {
+            return;
+        }
+
+        if (
+            file.type !== "application/pdf" &&
+            !file.name.toLowerCase().endsWith(".pdf")
+        ) {
+
+            fileName.textContent =
+                "❌ Please select a PDF file.";
+
+            fileName.style.display = "block";
+
+            input.value = "";
+
+            return;
+        }
+
+        const size =
+            (file.size / 1024 / 1024).toFixed(2);
+
+        fileName.textContent =
+            "📄 " + file.name +
+            " • " + size + " MB";
+
+        fileName.classList.add("show");
+
+    }
+
+
+    /* DRAG EFFECT */
+
+    dropArea.addEventListener(
+        "dragover",
+        function (event) {
+
+            event.preventDefault();
+
+            dropArea.classList.add("dragging");
+
+        }
+    );
+
+
+    dropArea.addEventListener(
+        "dragleave",
+        function () {
+
+            dropArea.classList.remove("dragging");
+
+        }
+    );
+
+
+    dropArea.addEventListener(
+        "drop",
+        function (event) {
+
+            event.preventDefault();
+
+            dropArea.classList.remove("dragging");
+
+            const files =
+                event.dataTransfer.files;
+
+            if (files.length > 0) {
+
+                input.files = files;
+
+                showFile(files[0]);
+
+            }
+
+        }
+    );
+
+
+    /* SUBMIT */
+
+    form.addEventListener(
+        "submit",
+        function () {
+
+            if (!input.files.length) {
+                return;
+            }
+
+            button.disabled = true;
+
+            button.innerHTML =
+                "⏳ Reading PDF & generating summary...";
+
+        }
+    );
+
+});
+
+</script>
+
+{% endblock %}

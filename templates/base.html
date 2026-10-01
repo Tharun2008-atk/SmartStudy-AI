@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <meta name="description"
+          content="SmartStudy AI - AI Powered Student Assistant">
+
+    <title>{% block title %}SmartStudy AI{% endblock %}</title>
+
+    <!-- Google Font -->
+    <link
+        href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet"
+    >
+
+    <!-- Main CSS -->
+    <link
+        rel="stylesheet"
+        href="{{ url_for('static', filename='css/style.css') }}?v=2"
+    >
+
+    <!-- Animation CSS -->
+    <link
+        rel="stylesheet"
+        href="{{ url_for('static', filename='css/animations.css') }}"
+    >
+
+    {% block extra_css %}
+    {% endblock %}
+</head>
+
+<body>
+
+    <!-- =========================
+         NAVBAR
+    ========================== -->
+    <nav class="navbar">
+
+        <div class="logo">
+            🤖 SmartStudy AI
+        </div>
+
+        <ul class="nav-links">
+
+            <li>
+                <a href="{{ url_for('home') }}">
+                    Home
+                </a>
+            </li>
+
+            <li>
+                <a href="{{ url_for('dashboard') }}">
+                    Dashboard
+                </a>
+            </li>
+
+            <li>
+                <a href="{{ url_for('chatbot') }}">
+                    AI Chat
+                </a>
+            </li>
+
+            <li>
+                <a href="{{ url_for('notes') }}">
+                    Notes
+                </a>
+            </li>
+
+            <li>
+                <a href="{{ url_for('quiz') }}">
+                    Quiz
+                </a>
+            </li>
+
+            <li>
+                <a href="{{ url_for('upload') }}">
+                    PDF
+                </a>
+            </li>
+
+            <li>
+                <a href="{{ url_for('attendance') }}">
+                    Attendance
+                </a>
+            </li>
+
+            <li>
+                <a href="{{ url_for('profile') }}">
+                    Profile
+                </a>
+            </li>
+
+            <li>
+                <a href="{{ url_for('logout') }}">
+                    Logout
+                </a>
+            </li>
+
+        </ul>
+
+    </nav>
+
+
+    <!-- =========================
+         PAGE CONTENT
+    ========================== -->
+    <main class="page-content page-enter">
+
+        {% block content %}
+        {% endblock %}
+
+    </main>
+
+
+    <!-- =========================
+         FOOTER
+    ========================== -->
+    <footer class="site-footer">
+
+        <p>
+            &copy; 2026 SmartStudy AI. All rights reserved.
+        </p>
+
+    </footer>
+
+
+    <!-- =========================
+         JAVASCRIPT
+    ========================== -->
+
+    <!-- Three.js -->
+    <script
+        src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js">
+    </script>
+
+    <!-- Background Animation -->
+    <script
+        src="{{ url_for('static', filename='js/three-bg.js') }}">
+    </script>
+
+    <!-- Main JavaScript -->
+    <script
+        src="{{ url_for('static', filename='js/app.js') }}">
+    </script>
+
+    <!-- Animation System -->
+    <script
+        src="{{ url_for('static', filename='js/animations.js') }}">
+    </script>
+
+
+    <!-- Prevent accidental multiple form submissions -->
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+
+            const forms = document.querySelectorAll("form");
+
+            forms.forEach(function (form) {
+
+                form.addEventListener("submit", function () {
+
+                    const button =
+                        form.querySelector("button[type='submit']");
+
+                    if (!button) {
+                        return;
+                    }
+
+                    if (button.disabled) {
+                        return;
+                    }
+
+                    const originalText = button.innerHTML;
+
+                    button.disabled = true;
+
+                    button.innerHTML = "⏳ Processing...";
+
+                    /*
+                        Safety fallback:
+                        If a request fails or takes too long,
+                        allow the user to submit again.
+                    */
+                    setTimeout(function () {
+
+                        button.disabled = false;
+                        button.innerHTML = originalText;
+
+                    }, 30000);
+
+                });
+
+            });
+
+        });
+    </script>
+
+
+    {% block extra_js %}
+    {% endblock %}
+
+</body>
+
+</html>

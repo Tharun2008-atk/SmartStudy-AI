@@ -1,0 +1,491 @@
+{% extends "base.html" %}
+
+{% block title %}
+AI Resume Analyzer
+{% endblock %}
+
+{% block content %}
+
+<style>
+
+/* =========================================
+   PREMIUM RESUME ANALYZER
+   ========================================= */
+
+.resume-page {
+    max-width: 850px;
+    margin: 0 auto;
+    padding: 20px 15px 40px;
+}
+
+
+/* HEADER */
+
+.resume-header {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.resume-icon {
+    width: 58px;
+    height: 58px;
+    margin: 0 auto 8px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 17px;
+
+    background: linear-gradient(
+        135deg,
+        #6366f1,
+        #8b5cf6
+    );
+
+    font-size: 30px;
+
+    box-shadow:
+        0 10px 25px rgba(99,102,241,.28);
+}
+
+.resume-header h1 {
+    margin: 0 0 5px;
+
+    color: #ffffff;
+
+    font-size: 27px;
+    font-weight: 800;
+}
+
+.resume-header p {
+    margin: 0;
+
+    color: rgba(255,255,255,.72);
+
+    font-size: 13px;
+}
+
+
+/* UPLOAD CARD */
+
+.resume-upload {
+    padding: 18px;
+
+    background: #ffffff;
+
+    border-radius: 16px;
+
+    box-shadow:
+        0 10px 30px rgba(0,0,0,.16);
+}
+
+.resume-label {
+    display: block;
+
+    margin-bottom: 8px;
+
+    color: #111827;
+
+    font-size: 14px;
+    font-weight: 700;
+}
+
+.resume-file {
+    width: 100%;
+    box-sizing: border-box;
+
+    padding: 11px;
+
+    border: 1px dashed #c7d2fe;
+
+    border-radius: 10px;
+
+    background: #f8faff;
+
+    color: #4b5563;
+
+    font-size: 13px;
+
+    cursor: pointer;
+}
+
+.resume-file:hover {
+    border-color: #6366f1;
+}
+
+.resume-button {
+    width: 100%;
+
+    margin-top: 11px;
+
+    padding: 12px;
+
+    border: none;
+
+    border-radius: 10px;
+
+    background: linear-gradient(
+        135deg,
+        #6366f1,
+        #7c3aed
+    );
+
+    color: white;
+
+    font-family: inherit;
+
+    font-size: 14px;
+    font-weight: 700;
+
+    cursor: pointer;
+
+    transition: .25s ease;
+}
+
+.resume-button:hover {
+    transform: translateY(-2px);
+
+    box-shadow:
+        0 8px 20px rgba(99,102,241,.28);
+}
+
+
+/* FILE NAME */
+
+.file-name {
+    margin-top: 8px;
+
+    color: #6b7280;
+
+    font-size: 12px;
+}
+
+
+/* RESULT */
+
+.resume-result {
+    margin-top: 18px;
+
+    padding: 18px;
+
+    background: #ffffff;
+
+    border-radius: 16px;
+
+    box-shadow:
+        0 10px 30px rgba(0,0,0,.16);
+}
+
+.result-heading {
+    display: flex;
+
+    align-items: center;
+
+    gap: 10px;
+
+    margin-bottom: 15px;
+}
+
+.result-heading-icon {
+    width: 38px;
+    height: 38px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 10px;
+
+    background: #eef2ff;
+
+    font-size: 20px;
+}
+
+.result-heading small {
+    display: block;
+
+    color: #9ca3af;
+
+    font-size: 10px;
+
+    font-weight: 700;
+
+    letter-spacing: 1px;
+}
+
+.result-heading h2 {
+    margin: 2px 0 0;
+
+    color: #111827;
+
+    font-size: 19px;
+}
+
+
+/* AI RESULT */
+
+.resume-content {
+    padding: 15px;
+
+    border-radius: 12px;
+
+    background: #f8fafc;
+
+    border: 1px solid #e5e7eb;
+}
+
+.resume-content pre {
+    margin: 0;
+
+    white-space: pre-wrap;
+
+    word-break: break-word;
+
+    color: #374151;
+
+    font-family: inherit;
+
+    font-size: 13px;
+
+    line-height: 1.65;
+}
+
+
+/* TIP */
+
+.resume-tip {
+    margin-top: 12px;
+
+    padding: 11px 13px;
+
+    border-radius: 10px;
+
+    background: #eef2ff;
+
+    color: #4338ca;
+
+    font-size: 12px;
+
+    line-height: 1.5;
+}
+
+
+/* MOBILE */
+
+@media(max-width:600px) {
+
+    .resume-page {
+        padding: 15px 10px 30px;
+    }
+
+    .resume-header h1 {
+        font-size: 23px;
+    }
+
+    .resume-upload,
+    .resume-result {
+        padding: 14px;
+    }
+
+    .resume-content {
+        padding: 12px;
+    }
+
+}
+
+</style>
+
+
+<div class="resume-page">
+
+    <!-- HEADER -->
+
+    <div class="resume-header">
+
+        <div class="resume-icon">
+            📄
+        </div>
+
+        <h1>
+            AI Resume Analyzer
+        </h1>
+
+        <p>
+            Upload your resume and get practical AI feedback.
+        </p>
+
+    </div>
+
+
+    <!-- UPLOAD -->
+
+    <div class="resume-upload">
+
+        <form
+            method="POST"
+            enctype="multipart/form-data"
+            id="resumeForm"
+        >
+
+            <label
+                for="resume"
+                class="resume-label"
+            >
+                📄 Select Resume PDF
+            </label>
+
+            <input
+                type="file"
+                id="resume"
+                name="resume"
+                class="resume-file"
+                accept=".pdf"
+                required
+            >
+
+            <div
+                class="file-name"
+                id="fileName"
+            >
+                No file selected
+            </div>
+
+            <button
+                type="submit"
+                class="resume-button"
+                id="analyzeButton"
+            >
+                🤖 Analyze Resume
+            </button>
+
+        </form>
+
+    </div>
+
+
+    {% if result %}
+
+    <!-- RESULT -->
+
+    <div class="resume-result">
+
+        <div class="result-heading">
+
+            <div class="result-heading-icon">
+                🤖
+            </div>
+
+            <div>
+
+                <small>
+                    SMARTSTUDY AI
+                </small>
+
+                <h2>
+                    Resume Analysis
+                </h2>
+
+            </div>
+
+        </div>
+
+
+        <div class="resume-content">
+
+            <pre>{{ result }}</pre>
+
+        </div>
+
+
+        <div class="resume-tip">
+
+            💡 <strong>Tip:</strong>
+            Use the suggestions above to improve your
+            resume before applying for internships or jobs.
+
+        </div>
+
+    </div>
+
+    {% endif %}
+
+</div>
+
+
+<script>
+
+document.addEventListener(
+    "DOMContentLoaded",
+    function () {
+
+        const fileInput =
+            document.getElementById("resume");
+
+        const fileName =
+            document.getElementById("fileName");
+
+        const form =
+            document.getElementById("resumeForm");
+
+        const button =
+            document.getElementById("analyzeButton");
+
+
+        /* FILE NAME */
+
+        if (fileInput) {
+
+            fileInput.addEventListener(
+                "change",
+                function () {
+
+                    if (this.files.length > 0) {
+
+                        const file =
+                            this.files[0];
+
+                        fileName.textContent =
+                            "📎 " + file.name;
+
+                    } else {
+
+                        fileName.textContent =
+                            "No file selected";
+
+                    }
+
+                }
+            );
+
+        }
+
+
+        /* SUBMIT */
+
+        if (form) {
+
+            form.addEventListener(
+                "submit",
+                function () {
+
+                    if (!form.checkValidity()) {
+                        return;
+                    }
+
+                    button.disabled = true;
+
+                    button.innerHTML =
+                        "⏳ Analyzing Resume...";
+
+                }
+            );
+
+        }
+
+    }
+);
+
+</script>
+
+{% endblock %}

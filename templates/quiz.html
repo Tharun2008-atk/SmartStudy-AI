@@ -1,0 +1,186 @@
+{% extends "base.html" %}
+
+{% block title %}
+Quiz Generator
+{% endblock %}
+
+{% block content %}
+
+<div class="tool-page page-content">
+
+    <!-- HEADER -->
+    <div class="tool-header slide-up">
+
+        <div class="tool-icon">
+            📝
+        </div>
+
+        <h1>AI Quiz Generator</h1>
+
+        <p>
+            Enter any topic and let SmartStudy AI generate
+            exam-friendly multiple-choice questions.
+        </p>
+
+    </div>
+
+
+    <!-- GENERATOR CARD -->
+    <div class="tool-card slide-up">
+
+        <form method="POST" class="ai-form">
+
+            <label for="topic">
+                📖 Enter Quiz Topic
+            </label>
+
+            <input
+                type="text"
+                id="topic"
+                name="topic"
+                placeholder="Example: Python, DBMS, HTML..."
+                required
+                autocomplete="off"
+            >
+
+            <button
+                type="submit"
+                class="tool-button premium-button"
+            >
+                🚀 Generate Quiz
+            </button>
+
+        </form>
+
+    </div>
+
+
+    {% if quiz %}
+
+    <!-- QUIZ RESULT -->
+    <div class="result-card quiz-result slide-up">
+
+        <div class="result-title">
+
+            <span>📝</span>
+
+            <div>
+                <small>SMARTSTUDY AI</small>
+
+                <h2>
+                    Generated Quiz
+                </h2>
+            </div>
+
+        </div>
+
+
+        <div class="quiz-content">
+
+            {% for line in quiz.split('\n') %}
+
+                {% if line.strip() == "" %}
+
+                    <div class="quiz-space"></div>
+
+
+                {% elif line.startswith("Q") and "." in line[:5] %}
+
+                    <div class="quiz-question">
+                        {{ line }}
+                    </div>
+
+
+                {% elif line.startswith("A)") %}
+
+                    <div class="quiz-option">
+                        <span>A</span>
+                        <p>{{ line[2:].strip() }}</p>
+                    </div>
+
+
+                {% elif line.startswith("B)") %}
+
+                    <div class="quiz-option">
+                        <span>B</span>
+                        <p>{{ line[2:].strip() }}</p>
+                    </div>
+
+
+                {% elif line.startswith("C)") %}
+
+                    <div class="quiz-option">
+                        <span>C</span>
+                        <p>{{ line[2:].strip() }}</p>
+                    </div>
+
+
+                {% elif line.startswith("D)") %}
+
+                    <div class="quiz-option">
+                        <span>D</span>
+                        <p>{{ line[2:].strip() }}</p>
+                    </div>
+
+
+                {% elif line.startswith("Correct Answer:") %}
+
+                    <div class="quiz-answer">
+                        ✅ {{ line }}
+                    </div>
+
+
+                {% else %}
+
+                    <p class="quiz-text">
+                        {{ line }}
+                    </p>
+
+                {% endif %}
+
+            {% endfor %}
+
+        </div>
+
+    </div>
+
+    {% endif %}
+
+</div>
+
+
+<!-- LOADING -->
+<script>
+
+document.addEventListener("DOMContentLoaded", function () {
+
+    const form = document.querySelector(".ai-form");
+
+    if (!form) {
+        return;
+    }
+
+    form.addEventListener("submit", function () {
+
+        const button = form.querySelector(
+            "button[type='submit']"
+        );
+
+        if (!button) {
+            return;
+        }
+
+        button.disabled = true;
+
+        button.classList.add("ai-loading");
+
+        button.innerHTML =
+            "⏳ Generating Quiz...";
+
+    });
+
+});
+
+</script>
+
+{% endblock %}
