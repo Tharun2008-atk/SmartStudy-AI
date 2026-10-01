@@ -1,0 +1,186 @@
+{% extends "base.html" %}
+
+{% block title %}
+AI Notes Generator
+{% endblock %}
+
+{% block content %}
+
+<div class="tool-page page-content">
+
+    <!-- Header -->
+    <div class="tool-header slide-up">
+
+        <div class="tool-icon">📚</div>
+
+        <h1>AI Notes Generator</h1>
+
+        <p>
+            Enter any topic and let SmartStudy AI create
+            simple, exam-friendly study notes.
+        </p>
+
+    </div>
+
+
+    <!-- Input Card -->
+    <div class="tool-card slide-up">
+
+        <form method="POST" class="ai-form">
+
+            <label for="topic">
+                📖 Enter Study Topic
+            </label>
+
+            <input
+                type="text"
+                id="topic"
+                name="topic"
+                value="{{ topic if topic else '' }}"
+                placeholder="Example: Artificial Intelligence"
+                required
+            >
+
+            <button
+                type="submit"
+                class="tool-button premium-button"
+            >
+                🚀 Generate Notes
+            </button>
+
+        </form>
+
+    </div>
+
+
+    {% if notes %}
+
+    <!-- Topic Display -->
+    <div class="result-card slide-up">
+
+        <div class="result-title">
+
+            <span>🎯</span>
+
+            <div>
+                <small>YOUR TOPIC</small>
+                <h2>{{ topic }}</h2>
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- AI Result -->
+    <div class="result-card slide-up">
+
+        <div class="result-title">
+
+            <span>🤖</span>
+
+            <div>
+                <small>SMARTSTUDY AI</small>
+                <h2>Generated Notes</h2>
+            </div>
+
+        </div>
+
+
+        <div class="ai-notes-content">
+
+            {% for line in notes.split('\n') %}
+
+                {% if line.startswith('###') %}
+
+                    <h3>
+                        {{ line.replace('###', '').strip() }}
+                    </h3>
+
+                {% elif line.startswith('##') %}
+
+                    <h3>
+                        {{ line.replace('##', '').strip() }}
+                    </h3>
+
+                {% elif line.startswith('#') %}
+
+                    <h2>
+                        {{ line.replace('#', '').strip() }}
+                    </h2>
+
+                {% elif line.startswith('-') or line.startswith('*') %}
+
+                    <div class="note-point">
+                        <span>•</span>
+                        <p>
+                            {{ line[1:].strip() }}
+                        </p>
+                    </div>
+
+                {% elif line.strip() %}
+
+                    <p>
+                        {{ line }}
+                    </p>
+
+                {% else %}
+
+                    <div class="note-space"></div>
+
+                {% endif %}
+
+            {% endfor %}
+
+        </div>
+
+
+        <!-- Download -->
+        <div class="download-button">
+
+            <a
+                href="{{ url_for('download_notes') }}"
+                class="tool-button premium-button"
+            >
+                📥 Download Notes as PDF
+            </a>
+
+        </div>
+
+    </div>
+
+    {% endif %}
+
+</div>
+
+
+<script>
+
+document.addEventListener("DOMContentLoaded", function () {
+
+    const form = document.querySelector(".ai-form");
+
+    if (!form) return;
+
+    form.addEventListener("submit", function () {
+
+        const button = form.querySelector(
+            "button[type='submit']"
+        );
+
+        if (!button) return;
+
+        button.disabled = true;
+
+        button.classList.add("ai-loading");
+
+        button.innerHTML =
+            "⏳ Generating Notes...";
+
+    });
+
+});
+
+</script>
+
+{% endblock %}

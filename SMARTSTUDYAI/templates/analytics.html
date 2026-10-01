@@ -1,0 +1,942 @@
+{% extends "base.html" %}
+
+{% block title %}
+Analytics
+{% endblock %}
+
+{% block content %}
+
+<style>
+
+/* =========================================
+   PREMIUM ANALYTICS
+   ========================================= */
+
+.analytics-page {
+    max-width: 1050px;
+    margin: 0 auto;
+    padding: 20px 15px 40px;
+}
+
+
+/* HEADER */
+
+.analytics-header {
+    text-align: center;
+    margin-bottom: 22px;
+}
+
+.analytics-icon {
+    width: 58px;
+    height: 58px;
+
+    margin: 0 auto 8px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 17px;
+
+    background: linear-gradient(
+        135deg,
+        #6366f1,
+        #8b5cf6
+    );
+
+    font-size: 29px;
+
+    box-shadow:
+        0 10px 25px rgba(99,102,241,.25);
+}
+
+.analytics-header h1 {
+    margin: 0 0 5px;
+
+    color: #ffffff;
+
+    font-size: 27px;
+    font-weight: 800;
+}
+
+.analytics-header p {
+    margin: 0;
+
+    color: rgba(255,255,255,.70);
+
+    font-size: 13px;
+}
+
+
+/* =========================================
+   STAT CARDS
+   ========================================= */
+
+.analytics-grid {
+    display: grid;
+
+    grid-template-columns:
+        repeat(5, 1fr);
+
+    gap: 12px;
+
+    margin-bottom: 15px;
+}
+
+.analytics-card {
+    padding: 15px;
+
+    border-radius: 15px;
+
+    background: rgba(255,255,255,.07);
+
+    border:
+        1px solid rgba(255,255,255,.11);
+
+    backdrop-filter: blur(15px);
+
+    transition: .25s ease;
+}
+
+.analytics-card:hover {
+    transform: translateY(-3px);
+
+    border-color:
+        rgba(129,140,248,.45);
+}
+
+.analytics-card-top {
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+}
+
+.analytics-card-icon {
+    width: 36px;
+    height: 36px;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 10px;
+
+    background: rgba(99,102,241,.13);
+
+    font-size: 18px;
+}
+
+.analytics-label {
+    color: #9ca3af;
+
+    font-size: 10px;
+
+    font-weight: 700;
+}
+
+.analytics-card h2 {
+    margin: 11px 0 2px;
+
+    color: #ffffff;
+
+    font-size: 25px;
+}
+
+.analytics-card p {
+    margin: 0;
+
+    color: #8b95a7;
+
+    font-size: 10px;
+}
+
+
+/* =========================================
+   MAIN CARD
+   ========================================= */
+
+.analytics-main-card {
+    margin-top: 14px;
+
+    padding: 18px;
+
+    border-radius: 16px;
+
+    background: rgba(255,255,255,.07);
+
+    border:
+        1px solid rgba(255,255,255,.11);
+
+    backdrop-filter: blur(15px);
+}
+
+
+/* SECTION HEADER */
+
+.section-heading {
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    gap: 15px;
+
+    margin-bottom: 15px;
+}
+
+.section-heading h2 {
+    margin: 0 0 4px;
+
+    color: #ffffff;
+
+    font-size: 18px;
+}
+
+.section-heading p {
+    margin: 0;
+
+    color: #8b95a7;
+
+    font-size: 11px;
+}
+
+
+/* =========================================
+   ATTENDANCE
+   ========================================= */
+
+.percentage-badge {
+    padding: 7px 13px;
+
+    border-radius: 20px;
+
+    background: rgba(6,182,212,.12);
+
+    color: #67e8f9;
+
+    font-size: 15px;
+
+    font-weight: 800;
+}
+
+.progress-container {
+    width: 100%;
+    height: 9px;
+
+    overflow: hidden;
+
+    border-radius: 20px;
+
+    background: rgba(255,255,255,.08);
+}
+
+.progress-bar {
+    height: 100%;
+
+    width: 0;
+
+    border-radius: 20px;
+
+    background: linear-gradient(
+        90deg,
+        #6366f1,
+        #06b6d4
+    );
+
+    box-shadow:
+        0 0 15px rgba(6,182,212,.3);
+
+    transition: width 1s ease;
+}
+
+.attendance-message {
+    margin-top: 11px;
+
+    padding: 10px 12px;
+
+    border-radius: 10px;
+
+    font-size: 11px;
+}
+
+.attendance-message.good {
+    background: rgba(34,197,94,.10);
+    color: #86efac;
+}
+
+.attendance-message.warning {
+    background: rgba(239,68,68,.10);
+    color: #fca5a5;
+}
+
+.attendance-message.neutral {
+    background: rgba(148,163,184,.10);
+    color: #cbd5e1;
+}
+
+
+/* =========================================
+   ACTIVITY
+   ========================================= */
+
+.activity-list {
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 8px;
+}
+
+.activity-row {
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    padding: 11px 13px;
+
+    border-radius: 11px;
+
+    background: rgba(0,0,0,.15);
+
+    border:
+        1px solid rgba(255,255,255,.06);
+
+    transition: .2s ease;
+}
+
+.activity-row:hover {
+    transform: translateX(3px);
+
+    background: rgba(255,255,255,.05);
+}
+
+.activity-left {
+    display: flex;
+
+    align-items: center;
+
+    gap: 11px;
+}
+
+.activity-icon {
+    width: 35px;
+    height: 35px;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 9px;
+
+    background: rgba(99,102,241,.12);
+
+    font-size: 17px;
+}
+
+.activity-row h3 {
+    margin: 0 0 2px;
+
+    color: #ffffff;
+
+    font-size: 13px;
+}
+
+.activity-row p {
+    margin: 0;
+
+    color: #7f8a9d;
+
+    font-size: 10px;
+}
+
+.activity-row > strong {
+    color: #67e8f9;
+
+    font-size: 16px;
+}
+
+
+/* =========================================
+   LATEST NOTES
+   ========================================= */
+
+.latest-notes {
+    max-height: 300px;
+
+    overflow-y: auto;
+
+    padding: 13px;
+
+    border-radius: 11px;
+
+    background: rgba(0,0,0,.18);
+}
+
+.latest-notes pre {
+    margin: 0;
+
+    white-space: pre-wrap;
+
+    word-break: break-word;
+
+    color: #d1d5db;
+
+    font-family: inherit;
+
+    font-size: 12px;
+
+    line-height: 1.6;
+}
+
+
+/* =========================================
+   QUICK ACTIONS
+   ========================================= */
+
+.analytics-actions {
+    display: grid;
+
+    grid-template-columns:
+        repeat(4, 1fr);
+
+    gap: 10px;
+
+    margin-top: 14px;
+}
+
+.analytics-actions a {
+    padding: 11px;
+
+    text-align: center;
+
+    text-decoration: none;
+
+    color: #ffffff;
+
+    border-radius: 11px;
+
+    background:
+        linear-gradient(
+            135deg,
+            rgba(99,102,241,.18),
+            rgba(6,182,212,.10)
+        );
+
+    border:
+        1px solid rgba(255,255,255,.09);
+
+    font-size: 11px;
+
+    transition: .25s ease;
+}
+
+.analytics-actions a:hover {
+    transform: translateY(-2px);
+
+    border-color:
+        rgba(129,140,248,.45);
+}
+
+
+/* =========================================
+   MOBILE
+   ========================================= */
+
+@media (max-width: 900px) {
+
+    .analytics-grid {
+        grid-template-columns:
+            repeat(2, 1fr);
+    }
+
+}
+
+@media (max-width: 600px) {
+
+    .analytics-page {
+        padding: 15px 10px 30px;
+    }
+
+    .analytics-header h1 {
+        font-size: 23px;
+    }
+
+    .analytics-grid {
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .analytics-main-card {
+        padding: 14px;
+    }
+
+    .analytics-actions {
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .section-heading {
+        align-items: flex-start;
+    }
+
+}
+
+</style>
+
+
+<div class="analytics-page">
+
+    <!-- HEADER -->
+
+    <div class="analytics-header">
+
+        <div class="analytics-icon">
+            📊
+        </div>
+
+        <h1>
+            Learning Analytics
+        </h1>
+
+        <p>
+            Track your SmartStudy AI learning activity.
+        </p>
+
+    </div>
+
+
+    <!-- STAT CARDS -->
+
+    <div class="analytics-grid">
+
+        <div class="analytics-card">
+
+            <div class="analytics-card-top">
+
+                <div class="analytics-card-icon">
+                    🤖
+                </div>
+
+                <span class="analytics-label">
+                    AI CHATS
+                </span>
+
+            </div>
+
+            <h2>
+                {{ total_chats }}
+            </h2>
+
+            <p>
+                Questions asked
+            </p>
+
+        </div>
+
+
+        <div class="analytics-card">
+
+            <div class="analytics-card-top">
+
+                <div class="analytics-card-icon">
+                    📚
+                </div>
+
+                <span class="analytics-label">
+                    NOTES
+                </span>
+
+            </div>
+
+            <h2>
+                {{ total_notes }}
+            </h2>
+
+            <p>
+                Notes generated
+            </p>
+
+        </div>
+
+
+        <div class="analytics-card">
+
+            <div class="analytics-card-top">
+
+                <div class="analytics-card-icon">
+                    📝
+                </div>
+
+                <span class="analytics-label">
+                    QUIZZES
+                </span>
+
+            </div>
+
+            <h2>
+                {{ total_quizzes }}
+            </h2>
+
+            <p>
+                Quizzes created
+            </p>
+
+        </div>
+
+
+        <div class="analytics-card">
+
+            <div class="analytics-card-top">
+
+                <div class="analytics-card-icon">
+                    📄
+                </div>
+
+                <span class="analytics-label">
+                    PDFs
+                </span>
+
+            </div>
+
+            <h2>
+                {{ total_pdfs }}
+            </h2>
+
+            <p>
+                PDFs analyzed
+            </p>
+
+        </div>
+
+
+        <div class="analytics-card">
+
+            <div class="analytics-card-top">
+
+                <div class="analytics-card-icon">
+                    ⚡
+                </div>
+
+                <span class="analytics-label">
+                    TOTAL
+                </span>
+
+            </div>
+
+            <h2>
+                {{ total_activity }}
+            </h2>
+
+            <p>
+                AI activities
+            </p>
+
+        </div>
+
+    </div>
+
+
+    <!-- ATTENDANCE -->
+
+    <div class="analytics-main-card">
+
+        <div class="section-heading">
+
+            <div>
+
+                <h2>
+                    🎓 Attendance
+                </h2>
+
+                <p>
+                    Latest recorded attendance.
+                </p>
+
+            </div>
+
+            <span class="percentage-badge">
+                {{ attendance }}%
+            </span>
+
+        </div>
+
+
+        <div class="progress-container">
+
+            <div
+                class="progress-bar"
+                data-attendance="{{ attendance }}"
+            ></div>
+
+        </div>
+
+
+        {% if attendance >= 75 %}
+
+            <div class="attendance-message good">
+                ✅ Your attendance is above the 75% requirement.
+            </div>
+
+        {% elif attendance > 0 %}
+
+            <div class="attendance-message warning">
+                ⚠️ Your attendance is below 75%.
+            </div>
+
+        {% else %}
+
+            <div class="attendance-message neutral">
+                📌 No attendance record available yet.
+            </div>
+
+        {% endif %}
+
+    </div>
+
+
+    <!-- ACTIVITY -->
+
+    <div class="analytics-main-card">
+
+        <div class="section-heading">
+
+            <div>
+
+                <h2>
+                    📈 Learning Activity
+                </h2>
+
+                <p>
+                    Your SmartStudy AI tool usage.
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <div class="activity-list">
+
+            <div class="activity-row">
+
+                <div class="activity-left">
+
+                    <div class="activity-icon">
+                        🤖
+                    </div>
+
+                    <div>
+
+                        <h3>
+                            AI Chatbot
+                        </h3>
+
+                        <p>
+                            Questions and answers
+                        </p>
+
+                    </div>
+
+                </div>
+
+                <strong>
+                    {{ total_chats }}
+                </strong>
+
+            </div>
+
+
+            <div class="activity-row">
+
+                <div class="activity-left">
+
+                    <div class="activity-icon">
+                        📚
+                    </div>
+
+                    <div>
+
+                        <h3>
+                            Notes Generator
+                        </h3>
+
+                        <p>
+                            Study notes created
+                        </p>
+
+                    </div>
+
+                </div>
+
+                <strong>
+                    {{ total_notes }}
+                </strong>
+
+            </div>
+
+
+            <div class="activity-row">
+
+                <div class="activity-left">
+
+                    <div class="activity-icon">
+                        📝
+                    </div>
+
+                    <div>
+
+                        <h3>
+                            Quiz Generator
+                        </h3>
+
+                        <p>
+                            Practice quizzes
+                        </p>
+
+                    </div>
+
+                </div>
+
+                <strong>
+                    {{ total_quizzes }}
+                </strong>
+
+            </div>
+
+
+            <div class="activity-row">
+
+                <div class="activity-left">
+
+                    <div class="activity-icon">
+                        📄
+                    </div>
+
+                    <div>
+
+                        <h3>
+                            PDF Summarizer
+                        </h3>
+
+                        <p>
+                            Study documents processed
+                        </p>
+
+                    </div>
+
+                </div>
+
+                <strong>
+                    {{ total_pdfs }}
+                </strong>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- LATEST NOTES -->
+
+    {% if latest_notes %}
+
+    <div class="analytics-main-card">
+
+        <div class="section-heading">
+
+            <div>
+
+                <h2>
+                    📖 Latest Notes
+                </h2>
+
+                <p>
+                    Your latest generated study material.
+                </p>
+
+            </div>
+
+        </div>
+
+        <div class="latest-notes">
+
+            <pre>{{ latest_notes }}</pre>
+
+        </div>
+
+    </div>
+
+    {% endif %}
+
+
+    <!-- QUICK ACTIONS -->
+
+    <div class="analytics-actions">
+
+        <a href="{{ url_for('chatbot') }}">
+            🤖 Ask AI
+        </a>
+
+        <a href="{{ url_for('notes') }}">
+            📚 Notes
+        </a>
+
+        <a href="{{ url_for('quiz') }}">
+            📝 Quiz
+        </a>
+
+        <a href="{{ url_for('attendance') }}">
+            🎓 Attendance
+        </a>
+
+    </div>
+
+</div>
+
+
+<script>
+
+document.addEventListener(
+    "DOMContentLoaded",
+    function () {
+
+        const progressBar =
+            document.querySelector(".progress-bar");
+
+        if (!progressBar) {
+            return;
+        }
+
+        const attendance =
+            parseFloat(
+                progressBar.dataset.attendance || 0
+            );
+
+        const safeAttendance =
+            Math.max(
+                0,
+                Math.min(
+                    100,
+                    attendance
+                )
+            );
+
+        setTimeout(function () {
+
+            progressBar.style.width =
+                safeAttendance + "%";
+
+        }, 150);
+
+    }
+);
+
+</script>
+
+{% endblock %}

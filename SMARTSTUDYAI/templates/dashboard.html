@@ -1,0 +1,433 @@
+{% extends "base.html" %}
+
+{% block title %}
+Dashboard
+{% endblock %}
+
+{% block content %}
+
+<div class="dashboard-page">
+
+    <!-- =========================
+         HEADER
+    ========================== -->
+
+    <div class="dashboard-header">
+
+        <div>
+
+            <p class="dashboard-label">
+                SMARTSTUDY AI
+            </p>
+
+            <h1>
+                Welcome back,
+                <span>{{ user["fullname"] }}</span> 👋
+            </h1>
+
+            <p class="dashboard-subtitle">
+                Continue learning and track your progress from one place.
+            </p>
+
+        </div>
+
+        <a href="{{ url_for('profile') }}"
+           class="profile-dashboard-btn">
+
+            👤 My Profile
+
+        </a>
+
+    </div>
+
+
+    <!-- =========================
+         STATISTICS
+    ========================== -->
+
+    <div class="dashboard-stats">
+
+        <div class="dashboard-stat-card">
+
+            <div class="stat-icon">
+                🤖
+            </div>
+
+            <div>
+                <h3>{{ chats }}</h3>
+                <p>AI Chats</p>
+            </div>
+
+        </div>
+
+
+        <div class="dashboard-stat-card">
+
+            <div class="stat-icon">
+                📚
+            </div>
+
+            <div>
+                <h3>{{ notes }}</h3>
+                <p>Notes Generated</p>
+            </div>
+
+        </div>
+
+
+        <div class="dashboard-stat-card">
+
+            <div class="stat-icon">
+                📝
+            </div>
+
+            <div>
+                <h3>{{ quizzes }}</h3>
+                <p>Quizzes Generated</p>
+            </div>
+
+        </div>
+
+
+        <div class="dashboard-stat-card">
+
+            <div class="stat-icon">
+                📄
+            </div>
+
+            <div>
+                <h3>{{ pdfs }}</h3>
+                <p>PDFs Summarized</p>
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- =========================
+         ATTENDANCE
+    ========================== -->
+
+    <div class="dashboard-attendance">
+
+        <div>
+
+            <p class="small-title">
+                ATTENDANCE
+            </p>
+
+            <h2>
+                Your Current Attendance
+            </h2>
+
+            <p>
+                Keep track of your attendance and stay above the required percentage.
+            </p>
+
+        </div>
+
+        <div class="attendance-circle">
+
+            <strong>
+                {{ attendance }}%
+            </strong>
+
+        </div>
+
+    </div>
+
+
+    <!-- =========================
+         AI TOOLS
+    ========================== -->
+
+    <div class="dashboard-section-title">
+
+        <p>LEARNING TOOLS</p>
+
+        <h2>
+            What do you want to study today?
+        </h2>
+
+    </div>
+
+
+    <div class="dashboard-tools">
+
+        <a href="{{ url_for('chatbot') }}"
+           class="dashboard-tool-card">
+
+            <div class="tool-icon-small">
+                🤖
+            </div>
+
+            <h3>AI Chatbot</h3>
+
+            <p>
+                Ask questions and get instant AI explanations.
+            </p>
+
+            <span>
+                Open Tool →
+            </span>
+
+        </a>
+
+
+        <a href="{{ url_for('notes') }}"
+           class="dashboard-tool-card">
+
+            <div class="tool-icon-small">
+                📚
+            </div>
+
+            <h3>AI Notes</h3>
+
+            <p>
+                Generate simple study notes for any topic.
+            </p>
+
+            <span>
+                Open Tool →
+            </span>
+
+        </a>
+
+
+        <a href="{{ url_for('quiz') }}"
+           class="dashboard-tool-card">
+
+            <div class="tool-icon-small">
+                📝
+            </div>
+
+            <h3>AI Quiz</h3>
+
+            <p>
+                Generate practice questions instantly.
+            </p>
+
+            <span>
+                Open Tool →
+            </span>
+
+        </a>
+
+
+        <a href="{{ url_for('upload') }}"
+           class="dashboard-tool-card">
+
+            <div class="tool-icon-small">
+                📄
+            </div>
+
+            <h3>PDF Summarizer</h3>
+
+            <p>
+                Upload notes and generate an AI summary.
+            </p>
+
+            <span>
+                Open Tool →
+            </span>
+
+        </a>
+
+
+        <a href="{{ url_for('flashcards') }}"
+           class="dashboard-tool-card">
+
+            <div class="tool-icon-small">
+                🧠
+            </div>
+
+            <h3>Flashcards</h3>
+
+            <p>
+                Create quick revision flashcards.
+            </p>
+
+            <span>
+                Open Tool →
+            </span>
+
+        </a>
+
+
+        <a href="{{ url_for('attendance') }}"
+           class="dashboard-tool-card">
+
+            <div class="tool-icon-small">
+                📊
+            </div>
+
+            <h3>Attendance</h3>
+
+            <p>
+                Calculate and track your attendance.
+            </p>
+
+            <span>
+                Open Tool →
+            </span>
+
+        </a>
+
+
+        <a href="{{ url_for('resume') }}"
+           class="dashboard-tool-card">
+
+            <div class="tool-icon-small">
+                📄
+            </div>
+
+            <h3>Resume Analyzer</h3>
+
+            <p>
+                Analyze your resume using AI.
+            </p>
+
+            <span>
+                Open Tool →
+            </span>
+
+        </a>
+
+
+        <a href="{{ url_for('analytics') }}"
+           class="dashboard-tool-card">
+
+            <div class="tool-icon-small">
+                📈
+            </div>
+
+            <h3>Analytics</h3>
+
+            <p>
+                View your learning statistics and progress.
+            </p>
+
+            <span>
+                Open Tool →
+            </span>
+
+        </a>
+
+    </div>
+
+
+    <!-- =========================
+         RECENT ACTIVITY
+    ========================== -->
+
+    <div class="recent-section">
+
+        <div class="recent-card">
+
+            <div class="recent-heading">
+
+                <h2>
+                    🤖 Recent AI Chats
+                </h2>
+
+                <a href="{{ url_for('history') }}">
+                    View All
+                </a>
+
+            </div>
+
+
+            {% if recent_chats %}
+
+                {% for chat in recent_chats %}
+
+                <div class="recent-item">
+
+                    <div class="recent-item-icon">
+                        💬
+                    </div>
+
+                    <div>
+
+                        <strong>
+                            {{ chat["question"] }}
+                        </strong>
+
+                        <small>
+                            {{ chat["created_at"] }}
+                        </small>
+
+                    </div>
+
+                </div>
+
+                {% endfor %}
+
+            {% else %}
+
+                <div class="empty-activity">
+                    No AI chats yet.
+                </div>
+
+            {% endif %}
+
+        </div>
+
+
+        <div class="recent-card">
+
+            <div class="recent-heading">
+
+                <h2>
+                    📚 Recent Notes
+                </h2>
+
+                <a href="{{ url_for('notes') }}">
+                    Create Notes
+                </a>
+
+            </div>
+
+
+            {% if recent_notes %}
+
+                {% for note in recent_notes %}
+
+                <div class="recent-item">
+
+                    <div class="recent-item-icon">
+                        📖
+                    </div>
+
+                    <div>
+
+                        <strong>
+                            {{ note["topic"] }}
+                        </strong>
+
+                        <small>
+                            {{ note["created_at"] }}
+                        </small>
+
+                    </div>
+
+                </div>
+
+                {% endfor %}
+
+            {% else %}
+
+                <div class="empty-activity">
+                    No notes generated yet.
+                </div>
+
+            {% endif %}
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}

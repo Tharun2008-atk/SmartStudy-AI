@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Dashboard</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+
+<div class="login-container">
+   <h1>Welcome {{ user['fullname'] }}</h1>
+
+<p><strong>Full Name:</strong> {{ user['fullname'] }}</p>
+
+<p><strong>Email:</strong> {{ user['email'] }}</p>
+
+<p><strong>Username:</strong> {{ user['username'] }}</p>
+
+<a href="/logout">
+    <button>Logout</button>
+    <a href="/chatbot">
+    <button>🤖 Open AI Chatbot</button>
+    ,<a href="{{ url_for('upload') }}">
+    Upload PDF
+</a>
+</a>
+</a>
+</a>
+</div>
+
+</body>
+</html>

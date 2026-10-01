@@ -1,0 +1,850 @@
+{% extends "base.html" %}
+
+{% block title %}
+AI Flashcards
+{% endblock %}
+
+{% block content %}
+
+<style>
+
+/* =========================================
+   PREMIUM AI FLASHCARDS
+   ========================================= */
+
+.flashcard-page {
+    max-width: 850px;
+    margin: 0 auto;
+    padding: 20px 15px 40px;
+}
+
+
+/* HEADER */
+
+.flashcard-header {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.flashcard-icon {
+    width: 58px;
+    height: 58px;
+    margin: 0 auto 8px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 17px;
+
+    background: linear-gradient(
+        135deg,
+        #6366f1,
+        #8b5cf6
+    );
+
+    font-size: 30px;
+
+    box-shadow:
+        0 10px 25px rgba(99,102,241,.28);
+}
+
+.flashcard-header h1 {
+    margin: 0 0 5px;
+
+    color: #ffffff;
+
+    font-size: 27px;
+    font-weight: 800;
+}
+
+.flashcard-header p {
+    margin: 0;
+
+    color: rgba(255,255,255,.72);
+
+    font-size: 13px;
+}
+
+
+/* INPUT */
+
+.flashcard-input {
+    padding: 18px;
+
+    background: #ffffff;
+
+    border-radius: 16px;
+
+    box-shadow:
+        0 10px 30px rgba(0,0,0,.16);
+}
+
+.flashcard-input label {
+    display: block;
+
+    margin-bottom: 7px;
+
+    color: #111827;
+
+    font-size: 14px;
+    font-weight: 700;
+}
+
+.flashcard-input input {
+    width: 100%;
+    box-sizing: border-box;
+
+    padding: 12px;
+
+    border: 1px solid #d1d5db;
+
+    border-radius: 10px;
+
+    outline: none;
+
+    color: #111827;
+
+    font-family: inherit;
+    font-size: 14px;
+}
+
+.flashcard-input input:focus {
+    border-color: #6366f1;
+
+    box-shadow:
+        0 0 0 3px rgba(99,102,241,.10);
+}
+
+.flashcard-button {
+    width: 100%;
+
+    margin-top: 11px;
+
+    padding: 12px;
+
+    border: none;
+
+    border-radius: 10px;
+
+    background: linear-gradient(
+        135deg,
+        #6366f1,
+        #7c3aed
+    );
+
+    color: white;
+
+    font-family: inherit;
+
+    font-size: 14px;
+    font-weight: 700;
+
+    cursor: pointer;
+
+    transition: .25s ease;
+}
+
+.flashcard-button:hover {
+    transform: translateY(-2px);
+
+    box-shadow:
+        0 8px 20px rgba(99,102,241,.28);
+}
+
+
+/* FLASHCARD AREA */
+
+.flashcard-area {
+    margin-top: 18px;
+
+    padding: 18px;
+
+    background: #ffffff;
+
+    border-radius: 16px;
+
+    box-shadow:
+        0 10px 30px rgba(0,0,0,.16);
+}
+
+
+/* TOP BAR */
+
+.flashcard-top {
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: center;
+
+    margin-bottom: 12px;
+
+    color: #6b7280;
+
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.flashcard-counter {
+    color: #6366f1;
+}
+
+
+/* CARD */
+
+.flashcard-scene {
+    width: 100%;
+    height: 270px;
+
+    perspective: 1000px;
+
+    cursor: pointer;
+}
+
+.flashcard {
+    position: relative;
+
+    width: 100%;
+    height: 100%;
+
+    transform-style: preserve-3d;
+
+    transition:
+        transform .55s ease;
+}
+
+.flashcard.flipped {
+    transform: rotateY(180deg);
+}
+
+.flashcard-face {
+    position: absolute;
+
+    width: 100%;
+    height: 100%;
+
+    box-sizing: border-box;
+
+    backface-visibility: hidden;
+
+    display: flex;
+
+    flex-direction: column;
+
+    justify-content: center;
+
+    align-items: center;
+
+    text-align: center;
+
+    padding: 30px;
+
+    border-radius: 16px;
+}
+
+.flashcard-front {
+    background:
+        linear-gradient(
+            135deg,
+            #eef2ff,
+            #f5f3ff
+        );
+
+    border: 1px solid #c7d2fe;
+}
+
+.flashcard-back {
+    background:
+        linear-gradient(
+            135deg,
+            #ecfdf5,
+            #f0fdf4
+        );
+
+    border: 1px solid #a7f3d0;
+
+    transform: rotateY(180deg);
+}
+
+.card-label {
+    margin-bottom: 12px;
+
+    color: #6366f1;
+
+    font-size: 11px;
+
+    font-weight: 800;
+
+    letter-spacing: 1.2px;
+}
+
+.flashcard-back .card-label {
+    color: #059669;
+}
+
+.card-text {
+    color: #1f2937;
+
+    font-size: 18px;
+
+    font-weight: 600;
+
+    line-height: 1.55;
+}
+
+.flip-hint {
+    margin-top: 18px;
+
+    color: #9ca3af;
+
+    font-size: 11px;
+}
+
+
+/* CONTROLS */
+
+.flashcard-controls {
+    display: flex;
+
+    justify-content: center;
+
+    gap: 10px;
+
+    margin-top: 14px;
+}
+
+.flashcard-control {
+    padding: 9px 16px;
+
+    border: 1px solid #d1d5db;
+
+    border-radius: 9px;
+
+    background: #ffffff;
+
+    color: #374151;
+
+    font-family: inherit;
+
+    font-size: 12px;
+
+    font-weight: 600;
+
+    cursor: pointer;
+
+    transition: .2s ease;
+}
+
+.flashcard-control:hover {
+    background: #eef2ff;
+
+    border-color: #c7d2fe;
+
+    color: #4338ca;
+}
+
+.flashcard-control:disabled {
+    opacity: .4;
+
+    cursor: not-allowed;
+}
+
+
+/* PROGRESS */
+
+.flashcard-progress {
+    height: 5px;
+
+    margin-top: 15px;
+
+    overflow: hidden;
+
+    border-radius: 10px;
+
+    background: #e5e7eb;
+}
+
+.flashcard-progress-bar {
+    height: 100%;
+
+    width: 6.66%;
+
+    border-radius: 10px;
+
+    background: linear-gradient(
+        90deg,
+        #6366f1,
+        #8b5cf6
+    );
+
+    transition: width .3s ease;
+}
+
+
+/* MOBILE */
+
+@media(max-width:600px) {
+
+    .flashcard-page {
+        padding: 15px 10px 30px;
+    }
+
+    .flashcard-header h1 {
+        font-size: 23px;
+    }
+
+    .flashcard-input,
+    .flashcard-area {
+        padding: 14px;
+    }
+
+    .flashcard-scene {
+        height: 250px;
+    }
+
+    .flashcard-face {
+        padding: 20px;
+    }
+
+    .card-text {
+        font-size: 16px;
+    }
+
+    .flashcard-control {
+        flex: 1;
+        padding: 9px 10px;
+    }
+
+}
+
+</style>
+
+
+<div class="flashcard-page">
+
+    <!-- HEADER -->
+
+    <div class="flashcard-header">
+
+        <div class="flashcard-icon">
+            🃏
+        </div>
+
+        <h1>
+            AI Flashcard Generator
+        </h1>
+
+        <p>
+            Generate quick revision cards from any study topic.
+        </p>
+
+    </div>
+
+
+    <!-- INPUT -->
+
+    <div class="flashcard-input">
+
+        <form method="POST" id="flashcardForm">
+
+            <label for="topic">
+                📖 Enter Flashcard Topic
+            </label>
+
+            <input
+                type="text"
+                id="topic"
+                name="topic"
+                placeholder="Example: Computer Networks"
+                required
+                autocomplete="off"
+            >
+
+            <button
+                type="submit"
+                class="flashcard-button"
+                id="generateButton"
+            >
+                🚀 Generate Flashcards
+            </button>
+
+        </form>
+
+    </div>
+
+
+    {% if flashcards %}
+
+    <!-- FLASHCARD DATA -->
+
+    <div
+        id="flashcardData"
+        data-content="{{ flashcards | e }}"
+        style="display:none;"
+    ></div>
+
+
+    <!-- FLASHCARD AREA -->
+
+    <div class="flashcard-area">
+
+        <div class="flashcard-top">
+
+            <span>
+                🧠 Revision Mode
+            </span>
+
+            <span
+                class="flashcard-counter"
+                id="counter"
+            >
+                1 / 15
+            </span>
+
+        </div>
+
+
+        <div
+            class="flashcard-scene"
+            id="flashcardScene"
+        >
+
+            <div
+                class="flashcard"
+                id="flashcard"
+            >
+
+                <!-- FRONT -->
+
+                <div class="flashcard-face flashcard-front">
+
+                    <div class="card-label">
+                        QUESTION
+                    </div>
+
+                    <div
+                        class="card-text"
+                        id="questionText"
+                    ></div>
+
+                    <div class="flip-hint">
+                        👆 Tap the card to reveal answer
+                    </div>
+
+                </div>
+
+
+                <!-- BACK -->
+
+                <div class="flashcard-face flashcard-back">
+
+                    <div class="card-label">
+                        ANSWER
+                    </div>
+
+                    <div
+                        class="card-text"
+                        id="answerText"
+                    ></div>
+
+                    <div class="flip-hint">
+                        👆 Tap again to see question
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- CONTROLS -->
+
+        <div class="flashcard-controls">
+
+            <button
+                type="button"
+                class="flashcard-control"
+                id="previousButton"
+            >
+                ← Previous
+            </button>
+
+            <button
+                type="button"
+                class="flashcard-control"
+                id="nextButton"
+            >
+                Next →
+            </button>
+
+        </div>
+
+
+        <!-- PROGRESS -->
+
+        <div class="flashcard-progress">
+
+            <div
+                class="flashcard-progress-bar"
+                id="progressBar"
+            ></div>
+
+        </div>
+
+    </div>
+
+    {% endif %}
+
+</div>
+
+
+<script>
+
+document.addEventListener("DOMContentLoaded", function () {
+
+    const form =
+        document.getElementById("flashcardForm");
+
+    const button =
+        document.getElementById("generateButton");
+
+
+    /* GENERATING */
+
+    if (form) {
+
+        form.addEventListener("submit", function () {
+
+            if (!form.checkValidity()) {
+                return;
+            }
+
+            button.disabled = true;
+
+            button.innerHTML =
+                "⏳ Creating Flashcards...";
+
+        });
+
+    }
+
+
+    /* FLASHCARDS */
+
+    const data =
+        document.getElementById("flashcardData");
+
+    if (!data) {
+        return;
+    }
+
+
+    const rawText =
+        data.getAttribute("data-content") || "";
+
+
+    const cards = [];
+
+    const lines =
+        rawText.split("\n");
+
+
+    let question = "";
+    let answer = "";
+
+
+    lines.forEach(function (line) {
+
+        line = line.trim();
+
+
+        if (line.startsWith("Q:")) {
+
+            if (question && answer) {
+
+                cards.push({
+                    question: question,
+                    answer: answer
+                });
+
+            }
+
+            question =
+                line.substring(2).trim();
+
+            answer = "";
+
+        }
+
+        else if (line.startsWith("A:")) {
+
+            answer =
+                line.substring(2).trim();
+
+        }
+
+    });
+
+
+    if (question && answer) {
+
+        cards.push({
+            question: question,
+            answer: answer
+        });
+
+    }
+
+
+    if (!cards.length) {
+
+        document.getElementById("questionText").textContent =
+            "Flashcards could not be formatted.";
+
+        document.getElementById("answerText").textContent =
+            "Please generate the flashcards again.";
+
+        return;
+
+    }
+
+
+    let current = 0;
+
+
+    const flashcard =
+        document.getElementById("flashcard");
+
+    const questionText =
+        document.getElementById("questionText");
+
+    const answerText =
+        document.getElementById("answerText");
+
+    const counter =
+        document.getElementById("counter");
+
+    const progressBar =
+        document.getElementById("progressBar");
+
+    const previousButton =
+        document.getElementById("previousButton");
+
+    const nextButton =
+        document.getElementById("nextButton");
+
+
+    function showCard(index) {
+
+        flashcard.classList.remove("flipped");
+
+        questionText.textContent =
+            cards[index].question;
+
+        answerText.textContent =
+            cards[index].answer;
+
+        counter.textContent =
+            (index + 1) + " / " + cards.length;
+
+        progressBar.style.width =
+            (((index + 1) / cards.length) * 100) + "%";
+
+        previousButton.disabled =
+            index === 0;
+
+        nextButton.disabled =
+            index === cards.length - 1;
+
+    }
+
+
+    /* FLIP */
+
+    document
+        .getElementById("flashcardScene")
+        .addEventListener(
+            "click",
+            function () {
+
+                flashcard.classList.toggle("flipped");
+
+            }
+        );
+
+
+    /* PREVIOUS */
+
+    previousButton.addEventListener(
+        "click",
+        function () {
+
+            if (current > 0) {
+
+                current--;
+
+                showCard(current);
+
+            }
+
+        }
+    );
+
+
+    /* NEXT */
+
+    nextButton.addEventListener(
+        "click",
+        function () {
+
+            if (current < cards.length - 1) {
+
+                current++;
+
+                showCard(current);
+
+            }
+
+        }
+    );
+
+
+    /* KEYBOARD */
+
+    document.addEventListener(
+        "keydown",
+        function (event) {
+
+            if (event.key === "ArrowRight") {
+
+                nextButton.click();
+
+            }
+
+            if (event.key === "ArrowLeft") {
+
+                previousButton.click();
+
+            }
+
+            if (event.key === " ") {
+
+                event.preventDefault();
+
+                flashcard.classList.toggle("flipped");
+
+            }
+
+        }
+    );
+
+
+    showCard(0);
+
+});
+
+</script>
+
+{% endblock %}

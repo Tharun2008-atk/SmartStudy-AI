@@ -1,0 +1,533 @@
+{% extends "base.html" %}
+
+{% block title %}AI Chatbot{% endblock %}
+
+{% block content %}
+<style>
+
+/* CHATBOT */
+
+.chatbot-page{
+    max-width:950px;
+    margin:0 auto;
+    padding:20px 15px 35px;
+}
+
+.chatbot-header{
+    text-align:center;
+    margin-bottom:18px;
+}
+
+.chatbot-icon{
+    width:55px;
+    height:55px;
+    margin:0 auto 8px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    border-radius:16px;
+    background:linear-gradient(135deg,#6366f1,#8b5cf6);
+    font-size:28px;
+}
+
+.chatbot-header h1{
+    margin:0 0 5px;
+    color:#fff;
+    font-size:27px;
+}
+
+.chatbot-header p{
+    margin:0 auto;
+    max-width:600px;
+    color:rgba(255,255,255,.72);
+    font-size:13px;
+}
+
+
+/* INPUT */
+
+.chatbot-card{
+    padding:18px;
+    background:#fff;
+    border-radius:16px;
+    box-shadow:0 8px 25px rgba(0,0,0,.15);
+}
+
+.chatbot-card label{
+    display:block;
+    margin-bottom:7px;
+    color:#111827;
+    font-size:14px;
+    font-weight:700;
+}
+
+.chatbot-card textarea{
+    width:100%;
+    min-height:105px;
+    box-sizing:border-box;
+    padding:12px;
+    resize:vertical;
+    border:1px solid #d1d5db;
+    border-radius:10px;
+    outline:none;
+    color:#111827;
+    background:#fff;
+    font-family:inherit;
+    font-size:14px;
+    line-height:1.5;
+}
+
+.chatbot-card textarea:focus{
+    border-color:#6366f1;
+    box-shadow:0 0 0 3px rgba(99,102,241,.10);
+}
+
+.chatbot-info{
+    display:flex;
+    justify-content:space-between;
+    margin:5px 0 10px;
+    color:#6b7280;
+    font-size:11px;
+}
+
+.chatbot-button{
+    width:100%;
+    padding:11px;
+    border:0;
+    border-radius:10px;
+    background:linear-gradient(135deg,#6366f1,#7c3aed);
+    color:#fff;
+    font-weight:700;
+    cursor:pointer;
+}
+
+
+/* RESPONSE */
+
+.chatbot-response-card{
+    margin-top:18px;
+    padding:18px;
+    background:#fff;
+    border-radius:16px;
+    box-shadow:0 8px 25px rgba(0,0,0,.15);
+}
+
+.chatbot-response-header{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    padding-bottom:12px;
+    border-bottom:1px solid #e5e7eb;
+}
+
+.response-avatar{
+    width:38px;
+    height:38px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    border-radius:11px;
+    background:linear-gradient(135deg,#6366f1,#8b5cf6);
+    font-size:20px;
+}
+
+.response-header-text small{
+    display:block;
+    color:#6366f1;
+    font-size:9px;
+    font-weight:800;
+    letter-spacing:1px;
+}
+
+.response-header-text h2{
+    margin:2px 0 0;
+    color:#111827;
+    font-size:17px;
+}
+
+
+/* ANSWER */
+
+.chatbot-answer{
+    margin-top:14px;
+    padding:16px;
+    background:#f8fafc;
+    border:1px solid #e5e7eb;
+    border-radius:12px;
+    color:#374151;
+    font-size:14px;
+    line-height:1.55;
+    overflow-wrap:anywhere;
+}
+
+.chatbot-answer p{
+    margin:4px 0;
+}
+
+.chatbot-answer h2,
+.chatbot-answer h3{
+    margin:12px 0 5px;
+    color:#312e81;
+}
+
+.chatbot-answer h2{
+    font-size:17px;
+}
+
+.chatbot-answer h3{
+    font-size:15px;
+}
+
+
+/* BULLETS */
+
+.chatbot-point{
+    display:flex;
+    gap:7px;
+    margin:3px 0;
+}
+
+.chatbot-point span{
+    color:#6366f1;
+    font-weight:bold;
+}
+
+.chatbot-point p{
+    margin:0;
+}
+
+
+/* CODE */
+
+.chatbot-code{
+    display:block;
+    margin:8px 0;
+    padding:12px;
+    background:#111827;
+    color:#e5e7eb;
+    border-radius:8px;
+    font-family:Consolas,"Courier New",monospace;
+    font-size:12px;
+    line-height:1.45;
+    white-space:pre-wrap;
+    overflow-x:auto;
+}
+
+
+/* BUTTONS */
+
+.chatbot-actions{
+    display:flex;
+    gap:8px;
+    margin-top:10px;
+}
+
+.chatbot-action{
+    padding:8px 12px;
+    border:1px solid #d1d5db;
+    border-radius:8px;
+    background:#fff;
+    color:#374151;
+    font-size:12px;
+    cursor:pointer;
+}
+
+.chatbot-action:hover{
+    background:#eef2ff;
+    color:#4338ca;
+}
+
+
+/* MOBILE */
+
+@media(max-width:600px){
+
+    .chatbot-page{
+        padding:15px 10px 25px;
+    }
+
+    .chatbot-header h1{
+        font-size:23px;
+    }
+
+    .chatbot-card,
+    .chatbot-response-card{
+        padding:14px;
+    }
+
+    .chatbot-answer{
+        padding:12px;
+        font-size:13px;
+    }
+
+    .chatbot-actions{
+        flex-direction:column;
+    }
+
+    .chatbot-action{
+        width:100%;
+    }
+
+}
+
+</style>
+
+
+
+<div class="chatbot-page">
+
+    <!-- HEADER -->
+
+    <div class="chatbot-header">
+
+        <div class="chatbot-icon">
+            🤖
+        </div>
+
+        <h1>SmartStudy AI Chatbot</h1>
+
+        <p>
+            Your personal AI study assistant for programming,
+            DBMS, networking, mathematics and other subjects.
+        </p>
+
+    </div>
+
+
+    <!-- QUESTION -->
+
+    <div class="chatbot-card">
+
+        <form method="POST" id="chatbotForm">
+
+            <label for="question">
+                💬 Ask SmartStudy AI
+            </label>
+
+            <textarea
+                id="question"
+                name="question"
+                maxlength="2000"
+                placeholder="Example: Explain normalization in DBMS..."
+                required
+            ></textarea>
+
+            <div class="chatbot-info">
+
+                <span>
+                    🧠 Ask anything related to your studies
+                </span>
+
+                <span id="charCount">
+                    0 / 2000
+                </span>
+
+            </div>
+
+            <button
+                type="submit"
+                class="chatbot-button"
+                id="askButton"
+            >
+                🚀 Ask AI
+            </button>
+
+        </form>
+
+    </div>
+
+
+    <!-- ANSWER -->
+
+    {% if answer %}
+
+    <div class="chatbot-response-card">
+
+        <div class="chatbot-response-header">
+
+            <div class="response-avatar">
+                🤖
+            </div>
+
+            <div class="response-header-text">
+
+                <small>SMARTSTUDY AI</small>
+
+                <h2>
+                    AI Response
+                </h2>
+
+            </div>
+
+        </div>
+
+
+        <div class="chatbot-answer" id="answerBox">
+
+    {% set ns = namespace(code=false) %}
+
+    {% for line in answer.split('\n') %}
+
+        {% if line.strip().startswith("```") %}
+
+            {% if ns.code %}
+                </code></pre>
+                {% set ns.code = false %}
+            {% else %}
+                <pre class="chatbot-code"><code>{% set ns.code = true %}
+            {% endif %}
+
+        {% elif ns.code %}{{ line }}
+
+        {% elif line.strip() == "" %}
+
+            <div style="height:4px;"></div>
+
+        {% elif line.startswith("###") %}
+
+            <h3>{{ line.replace("###","").strip() }}</h3>
+
+        {% elif line.startswith("##") %}
+
+            <h2>{{ line.replace("##","").strip() }}</h2>
+
+        {% elif line.startswith("#") %}
+
+            <h2>{{ line.replace("#","").strip() }}</h2>
+
+        {% elif line.startswith("- ") or line.startswith("* ") %}
+
+            <div class="chatbot-point">
+                <span>•</span>
+                <p>{{ line[2:].strip() }}</p>
+            </div>
+
+        {% else %}
+
+            <p>{{ line }}</p>
+
+        {% endif %}
+
+    {% endfor %}
+
+    {% if ns.code %}
+        </code></pre>
+    {% endif %}
+
+</div>
+
+
+        <div class="chatbot-actions">
+
+            <button
+                type="button"
+                class="chatbot-action"
+                onclick="copyAnswer()"
+            >
+                📋 Copy Answer
+            </button>
+
+            <button
+                type="button"
+                class="chatbot-action"
+                onclick="window.scrollTo({top:0,behavior:'smooth'})"
+            >
+                🔄 Ask Another
+            </button>
+
+        </div>
+
+    </div>
+
+    {% endif %}
+
+</div>
+
+
+<script>
+
+document.addEventListener("DOMContentLoaded", function () {
+
+    const form =
+        document.getElementById("chatbotForm");
+
+    const textarea =
+        document.getElementById("question");
+
+    const button =
+        document.getElementById("askButton");
+
+    const counter =
+        document.getElementById("charCount");
+
+
+    /* Character counter */
+
+    textarea.addEventListener("input", function () {
+
+        counter.textContent =
+            textarea.value.length + " / 2000";
+
+    });
+
+
+    /* Enter = submit */
+
+    textarea.addEventListener("keydown", function (event) {
+
+        if (
+            event.key === "Enter" &&
+            !event.shiftKey
+        ) {
+
+            event.preventDefault();
+
+            if (textarea.value.trim()) {
+                form.requestSubmit();
+            }
+
+        }
+
+    });
+
+
+    /* Loading */
+
+    form.addEventListener("submit", function () {
+
+        if (!textarea.value.trim()) {
+            return;
+        }
+
+        button.disabled = true;
+
+        button.innerHTML =
+            "⏳ SmartStudy AI is thinking...";
+
+    });
+
+});
+
+
+/* Copy */
+
+function copyAnswer() {
+
+    const box =
+        document.getElementById("answerBox");
+
+    if (!box) return;
+
+    navigator.clipboard.writeText(
+        box.innerText
+    ).then(function () {
+
+        alert("✅ Answer copied!");
+
+    });
+
+}
+
+</script>
+
+{% endblock %}

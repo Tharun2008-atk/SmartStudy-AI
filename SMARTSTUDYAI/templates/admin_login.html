@@ -1,0 +1,284 @@
+{% extends "base.html" %}
+
+{% block title %}
+Admin Login
+{% endblock %}
+
+{% block content %}
+
+<div class="admin-login-page">
+
+    <div class="admin-login-card">
+
+        <div class="admin-icon">
+            🔐
+        </div>
+
+        <h1>Admin Login</h1>
+
+        <p>
+            Sign in to access the SmartStudy AI administration panel.
+        </p>
+
+        {% if error %}
+
+        <div class="error-message">
+            ⚠️ {{ error }}
+        </div>
+
+        {% endif %}
+
+        <form method="POST">
+
+            <label>
+                Admin Username
+            </label>
+
+            <input
+                type="text"
+                name="username"
+                placeholder="Enter admin username"
+                required
+            >
+
+            <label>
+                Admin Password
+            </label>
+
+            <input
+                type="password"
+                name="password"
+                placeholder="Enter admin password"
+                required
+            >
+
+            <button type="submit">
+                🔐 Login to Admin Panel
+            </button>
+
+        </form>
+
+        <a
+            href="{{ url_for('home') }}"
+            class="back-link"
+        >
+            ← Back to Home
+        </a>
+
+    </div>
+
+</div>
+
+
+<style>
+
+.admin-login-page {
+
+    min-height: 75vh;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    padding: 50px 20px;
+
+}
+
+
+.admin-login-card {
+
+    width: min(450px, 100%);
+
+    padding: 40px;
+
+    text-align: center;
+
+    border-radius: 28px;
+
+    background:
+        rgba(255,255,255,.07);
+
+    border:
+        1px solid rgba(255,255,255,.15);
+
+    backdrop-filter: blur(25px);
+
+    box-shadow:
+        0 25px 70px rgba(0,0,0,.35);
+
+}
+
+
+.admin-icon {
+
+    width: 75px;
+
+    height: 75px;
+
+    margin: 0 auto 20px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    border-radius: 22px;
+
+    font-size: 35px;
+
+    background:
+        linear-gradient(
+            135deg,
+            rgba(99,102,241,.25),
+            rgba(6,182,212,.18)
+        );
+
+}
+
+
+.admin-login-card h1 {
+
+    margin: 0 0 10px;
+
+    color: white;
+
+    font-size: 32px;
+
+}
+
+
+.admin-login-card > p {
+
+    margin-bottom: 30px;
+
+    color: #9ca3af;
+
+}
+
+
+.admin-login-card form {
+
+    text-align: left;
+
+}
+
+
+.admin-login-card label {
+
+    display: block;
+
+    margin-bottom: 8px;
+
+    color: #e5e7eb;
+
+    font-weight: 600;
+
+}
+
+
+.admin-login-card input {
+
+    width: 100%;
+
+    padding: 14px 16px;
+
+    margin-bottom: 20px;
+
+    border-radius: 13px;
+
+    border: 1px solid rgba(255,255,255,.15);
+
+    background: rgba(0,0,0,.2);
+
+    color: white;
+
+    outline: none;
+
+}
+
+
+.admin-login-card input:focus {
+
+    border-color: #06b6d4;
+
+    box-shadow:
+        0 0 0 3px rgba(6,182,212,.12);
+
+}
+
+
+.admin-login-card button {
+
+    width: 100%;
+
+    padding: 15px;
+
+    border: none;
+
+    border-radius: 14px;
+
+    color: white;
+
+    font-size: 15px;
+
+    font-weight: 700;
+
+    cursor: pointer;
+
+    background:
+        linear-gradient(
+            135deg,
+            #6366f1,
+            #06b6d4
+        );
+
+    transition: .3s ease;
+
+}
+
+
+.admin-login-card button:hover {
+
+    transform: translateY(-3px);
+
+    box-shadow:
+        0 15px 35px rgba(6,182,212,.25);
+
+}
+
+
+.error-message {
+
+    margin-bottom: 20px;
+
+    padding: 13px;
+
+    border-radius: 12px;
+
+    background: rgba(239,68,68,.12);
+
+    color: #fca5a5;
+
+    font-size: 14px;
+
+}
+
+
+.back-link {
+
+    display: inline-block;
+
+    margin-top: 25px;
+
+    color: #67e8f9;
+
+    text-decoration: none;
+
+}
+
+</style>
+
+{% endblock %}
